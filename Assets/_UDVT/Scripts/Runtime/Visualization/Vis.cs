@@ -10,6 +10,7 @@ using UnityEngine;
 public enum VisType
 {
     Scatterplot,
+    
     //NewCode_Group4
     Histogram,
     Density,
@@ -62,6 +63,7 @@ public class Vis
 
     public float[] xyzOffset = new[] { 0.1f, 0.1f, 0.1f };         // Offset from origin (0,0) and End (1,0) for the Axes (x,y,z).
     public int[] xyzTicks = { 10, 10, 10 };                     // Amount of Ticks between min/max tick for Axes (x,y,z).
+    
     //NewCode_Group4
     public Color[] colorScheme = { Color.blue, Color.red };       // Defines Color Scheme for Color Channel
 
@@ -207,6 +209,7 @@ public class Vis
             default:
             case VisType.Scatterplot:
                 return new VisScatterplot();
+
             //NewCode_Group4
             case VisType.Histogram:
                 return new VisHistogram();

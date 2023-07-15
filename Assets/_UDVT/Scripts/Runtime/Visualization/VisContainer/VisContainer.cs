@@ -13,6 +13,7 @@ public class VisContainer
     public GameObject axisContainer;        // Empty GameObject for Hierarchy
     public GameObject gridContainer;        // Empty GameObject for Hierarchy
     public GameObject dataMarkContainer;    // Empty GameObject for Hierarchy
+    //NewCode_Group4
     public GameObject lineContainer;
     public GameObject meshContainer;
 
@@ -32,8 +33,8 @@ public class VisContainer
     private float[] xyzOffset;                  // Offset from origin (0,0) and End (1,0) for the Axes (x,y,z).
     private int[] xyzTicks;                     // Number of Ticks for each Axis (x,y,z).
     private Color[] colorScheme;                // Color Scheme for DataMarks
-    
-    
+
+
     #region CREATION OF ELEMENTS
 
     /// <summary>
@@ -58,6 +59,7 @@ public class VisContainer
         axisContainer = new GameObject("Axes");
         gridContainer = new GameObject("Grids");
         dataMarkContainer = new GameObject("Data Marks");
+        //NewCode_Group4
         lineContainer = new GameObject("Line");
         meshContainer = new GameObject("Mesh");
 
@@ -67,6 +69,7 @@ public class VisContainer
         axisContainer.transform.parent = visContainer.transform;
         gridContainer.transform.parent = visContainer.transform;
         dataMarkContainer.transform.parent = visContainer.transform;
+        //NewCode_Group4
         lineContainer.transform.parent = visContainer.transform;
         meshContainer.transform.parent = visContainer.transform;
 
@@ -74,10 +77,10 @@ public class VisContainer
 
         //Set the basic container size by using the visContainer
         containerBounds = visContainer.GetComponent<BoxCollider>().bounds;
-  
+
         return visContainer;
     }
-   
+
 
     /// <summary>
     /// Method to create a new Axis for a Direction (X/Y/Z), and add it to the list of DataAxis.
@@ -111,14 +114,16 @@ public class VisContainer
 
         dataGridList.Add(grid);
     }
-    
-public void lineRender ( Vector3 [] points){
+
+    //NewCode_Group4
+    public void lineRender(Vector3[] points)
+    {
 
 
         LineRenderer lineRenderer;
         // Get the Line Renderer component attached to the same GameObject
         lineRenderer = lineContainer.AddComponent<LineRenderer>();
-     
+
 
 
 
@@ -132,27 +137,28 @@ public void lineRender ( Vector3 [] points){
 
 
 
-}
+    }
 
-public void MeshRender(Vector3 [] points){
+    public void MeshRender(Vector3[] points)
+    {
         Mesh mesh = new Mesh();
-         int[] triangles = new int[(points.Length - 2)  * 6];
+        int[] triangles = new int[(points.Length - 2) * 6];
 
         // Populate the triangle indices based on the length of the points array
         int index = 0;
         for (int i = 1; i < points.Length - 1; i++)
         {
-            triangles[index] = i-1;
+            triangles[index] = i - 1;
             triangles[index + 1] = i;
-            triangles[index + 2] = i+1;
-            triangles[index +3] = i+1;
+            triangles[index + 2] = i + 1;
+            triangles[index + 3] = i + 1;
             triangles[index + 4] = i;
-            triangles[index + 5] = i-1;
-            
+            triangles[index + 5] = i - 1;
+
             index += 6;
         }
 
-           MeshFilter meshFilter = meshContainer.AddComponent<MeshFilter>();
+        MeshFilter meshFilter = meshContainer.AddComponent<MeshFilter>();
         MeshRenderer meshRenderer = meshContainer.AddComponent<MeshRenderer>();
 
         meshRenderer.material = new Material(Shader.Find("Standard"));
@@ -164,19 +170,20 @@ public void MeshRender(Vector3 [] points){
         meshFilter.mesh = mesh;
 
 
-}
+    }
 
-public void DrawStatistics(double [] scaledx, double [] scaledy ){
+    public void DrawStatistics(double[] scaledx, double[] scaledy)
+    {
 
 
-      DataStatistics  statisticsy =  new DataStatistics(scaledy);
+        DataStatistics statisticsy = new DataStatistics(scaledy);
         double mediany = statisticsy.Median();
         double maxy = statisticsy.Max();
         double miny = statisticsy.Min();
         double irq25y = statisticsy.LowerQuartile();
         double irq75y = statisticsy.UpperQuartile();
 
-        DataStatistics  statisticsx =  new DataStatistics(scaledx);
+        DataStatistics statisticsx = new DataStatistics(scaledx);
         double medianx = statisticsx.Median();
         double maxx = statisticsx.Max();
         double minx = statisticsx.Min();
@@ -191,27 +198,27 @@ public void DrawStatistics(double [] scaledx, double [] scaledy ){
         DataMark.Channel channel1 = DataMark.DefaultDataChannel();
         channel1.position.y = (float)mediany;
         channel1.position.x = (float)medianx;
-                channel1.color =  Color.white;
+        channel1.color = Color.white;
 
         dataMark1.CreateDataMark(dataMarkContainer.transform, channel1);
         channel1.position.y = (float)mediany;
         channel1.position.x = (float)minx;
-        channel1.color =  Color.white;
+        channel1.color = Color.white;
         dataMark1.CreateDataMark(dataMarkContainer.transform, channel1);
         channel1.position.y = (float)mediany;
         channel1.position.x = (float)maxx;
-                channel1.color =  Color.white;
+        channel1.color = Color.white;
         dataMark1.CreateDataMark(dataMarkContainer.transform, channel1);
         channel1.position.y = (float)mediany;
         channel1.position.x = (float)irq25x;
-        channel1.color =  Color.white;
+        channel1.color = Color.white;
         dataMark1.CreateDataMark(dataMarkContainer.transform, channel1);
         channel1.position.y = (float)mediany;
         channel1.position.x = (float)irq75x;
-        channel1.color =  Color.white;
+        channel1.color = Color.white;
         dataMark1.CreateDataMark(dataMarkContainer.transform, channel1);
 
-}
+    }
 
     /// <summary>
     /// Method to create a new DataMark for each value in the channelValues Dictionary.
@@ -219,7 +226,9 @@ public void DrawStatistics(double [] scaledx, double [] scaledy ){
     /// The DataMark is created with each channel (Pos, Size, Color,...) which has data saved to it.
     /// </summary>
     /// <param name="markPrefab"></param>
-  public  virtual void CreateDataMarks(GameObject markPrefab, bool line = false, bool mesh = false, bool statistics = false, bool surface = false)
+
+    //NewCode_Group4
+    public virtual void CreateDataMarks(GameObject markPrefab, bool line = false, bool mesh = false, bool statistics = false, bool surface = false)
     {
         // Set the positions to the Line Renderer component
 
@@ -239,9 +248,9 @@ public void DrawStatistics(double [] scaledx, double [] scaledy ){
             //Create Values
             DataMark.Channel channel = DataMark.DefaultDataChannel();
 
-            channel = GetDataMarkChannelValues(channel,mark);
-            
-            linePoints[mark] = new Vector3(channel.position.x/4, channel.position.y/4, channel.position.z/4);
+            channel = GetDataMarkChannelValues(channel, mark);
+
+            linePoints[mark] = new Vector3(channel.position.x / 4, channel.position.y / 4, channel.position.z / 4);
             meshPoints[mark] = new Vector3(channel.position.x, channel.position.y, channel.position.z);
 
             scaledy[mark] = channel.position.y;
@@ -250,22 +259,22 @@ public void DrawStatistics(double [] scaledx, double [] scaledy ){
 
             dataMark.CreateDataMark(dataMarkContainer.transform, channel);
             dataMarkList.Add(dataMark);
-            
+
         }
-        
+
         if (line == true)
 
             lineRender(linePoints);
 
         if (mesh == true)
             MeshRender(meshPoints);
-        
+
         if (statistics == true)
             DrawStatistics(scaledx, scaledy);
 
 
-       
-      
+
+
     }
 
     /// <summary>
@@ -306,7 +315,7 @@ public void DrawStatistics(double [] scaledx, double [] scaledy ){
             case VisChannel.XRotation:
             case VisChannel.YRotation:
             case VisChannel.ZRotation:
-                channelScale.Add(visChannel, GetChannelScale(dataValues,new []{0.0,360.0}));
+                channelScale.Add(visChannel, GetChannelScale(dataValues, new[] { 0.0, 360.0 }));
                 channelValues.Add(visChannel, dataValues);
                 break;
             case VisChannel.Color:
@@ -406,7 +415,7 @@ public void DrawStatistics(double [] scaledx, double [] scaledy ){
     /// <returns></returns>
     public Scale GetAxisScale(Direction axis)
     {
-        if (dataAxisList.Count < (int)axis+1)
+        if (dataAxisList.Count < (int)axis + 1)
         {
             Debug.LogError("Selected Axis is not created");
             return null;
@@ -459,7 +468,7 @@ public void DrawStatistics(double [] scaledx, double [] scaledy ){
     /// </summary>
     public void MoveGridBasedOnViewingDirection()
     {
-        if(dataGridList.Count < 3) return;
+        if (dataGridList.Count < 3) return;
 
         Vector3 center = GetCenterOfVisContainer();
         Vector3 cDir = Camera.main.transform.position;
@@ -572,8 +581,8 @@ public void DrawStatistics(double [] scaledx, double [] scaledy ){
     private List<double> GetAxisRange(Direction axis)
     {
         float[] axisOffsetCoord = GetAxisOffsetCoord(axis);
-        
-        return new List<double> { axisOffsetCoord[0], axisOffsetCoord[1]};
+
+        return new List<double> { axisOffsetCoord[0], axisOffsetCoord[1] };
     }
 
     /// <summary>
@@ -626,7 +635,7 @@ public void DrawStatistics(double [] scaledx, double [] scaledy ){
         };
 
         Scale scaleFunction = new ScaleNominal(domain, range, dataValues.ToList());
-            
+
         return scaleFunction;
     }
 
@@ -656,7 +665,7 @@ public void DrawStatistics(double [] scaledx, double [] scaledy ){
 
         return scaleFunction;
     }
-    
+
     /// <summary>
     /// Method sets the used Color Scheme for the DataMarks
     /// </summary>
